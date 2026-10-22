@@ -1,9 +1,9 @@
 # STATUS_SNAPSHOT（チャット-1 が毎回上書き。独立した確認ではない）
-時刻：2026-10-22 16:56
+時刻：2026-10-22 17:52
 
 ## Z890 status.txt
-time: 2026-10-22 16:52:05
-gpu_util: 99%  gpu_mem_mb: 20408
+time: 2026-10-22 17:52:08
+gpu_util: 99%  gpu_mem_mb: 25686
 job_running: 2  pending: 2  backlog: 0  gpu_idle_min: 0
 disk_free(/data): 4.8T
 --- runner.log (tail)
@@ -19,7 +19,7 @@ disk_free(/data): 4.8T
 ## watchdog.log（末尾 5 行）
 2026-10-22 14:11:54 watchdog start pid 426901
 
-## kaggle_ntl.txt（提出の履歴）
+## kaggle_ntl.txt
 57503784 COMPLETE public: 0.563 | 2026-10-22 01:00 | 0.5*Qwen3-8B-Base + 1.0*OLMo2-7B + 0.5*Mistral-7B-v0.3 (two-
 57472849 COMPLETE public: - | 2026-10-21 08:05 | Qwen3-8B-Base LoRA + OLMo2-7B LoRA (two-stage, pool_v1) + 0.
 57469281 COMPLETE public: 0.544 | 2026-10-21 06:21 | DIAG: same as 57464891 (0.5I+B+0.5T) but WITHOUT topic assig
