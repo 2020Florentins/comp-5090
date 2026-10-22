@@ -15,3 +15,6 @@ failed（新しい 3 件、LOG に記載済み）：82_gemma_v1_rr61、73_mistra
 
 - 06:50：90b は stage1 の 2125／4496（08:05〜08:15 完了の見込み）。新しい失敗なし。
 
+
+- 07:55：**Kaggle の API トークンが失効（HTTP 401）**。kaggle_ntl.txt は Authentication required。アップロード・提出・スコア確認が止まる（P-009、本人の対応待ち）。GPU ジョブは継続。90b は stage1 の 4350／4496（07:42）。
+

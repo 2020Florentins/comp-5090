@@ -174,3 +174,10 @@
 ## 2026-10-23 06:50 ループ（使用率：有効なライブ値なし。監視の最新は 04:48＝2 時間前で無効、キャッシュも古いため 35% とみなし、節約＝確認・記録のみ。07:10 にリセット予定）
 - 90b（Qwen3-8B-Base 全データ、pool_v4）：stage1 の 2125／4496（06:47）。完了は 08:05〜08:15 の見込み。その後 90c（T4 相当の手元テスト）、91 の順。failed に新しい失敗なし。
 - 動きなし。08:00 以降：OLMo 2・Mistral の重みのアップロード（Qwen は 90b の後）。
+
+## 2026-10-23 07:55 Kaggle の API トークンが失効（使用率：監視 06:50 のライブ値 15%、57 分前、優先順位②。07:10 のリセット後で、通常運用）
+- 監視報告（06:50）の指摘（kaggle_ntl.txt が Authentication required）を調べた。原因は watchdog ではなく、**トークンが Kaggle に拒否されている**こと。/data/nakamura/.kaggle/access_token（KGAT_ で始まる 37 文字、10/20 12:02 作成）を Bearer で呼ぶと HTTP 401 {"message":"Unauthenticated"}。kaggle CLI の competitions submissions／datasets list も同じエラー。02:49 の status では正常だったため、03:00〜07:40 の間に失効または無効化された（原因は不明。有効期限、またはアカウント側の操作の可能性）。
+- 影響：Kaggle へのアップロード（S-018）、提出、公開スコアの確認ができない。Z890 の GPU ジョブ（90b、90c、91）と、ローカルでの準備は止まらない。
+- 対応：トークンの再発行は本人だけの操作（Kaggle の Settings → API → Create New Token）。回避策は取らない（他の認証情報の探索、別アカウントの利用はしない）。NEXT の提案 P-009 に書いた。
+- 90b：stage1 の 4350／4496（07:42）。stage2 を含めて 08:05〜08:15 に完了の見込み。
+- 並行（CPU のみ）：検証グループ 0 で、TF-IDF の学習データに pool_v1／pool_v4 を足した効果を比べる実験（cv_tfidf_pool.py、結果は name-that-llm/cv_tfidf_pool.log）を開始。
