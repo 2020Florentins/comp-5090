@@ -30,7 +30,8 @@
 ## 4. 行動
 1. C:\Users\Nakamura\comp_project\MONITOR_REPORT.md の**先頭**に追記する（形式は MONITOR_PROMPT.md。判定、該当するずれ、根拠、状態、実行役へのお願い）。
 2. **要停止のときだけ** C:\Users\Nakamura\comp_project\HALT.md を作る（理由、根拠、再開の条件）。「注意」までは、報告のみ。
-3. 本人への報告は 5 行以内。PushNotification が使えるなら、「要停止」「実行役が止まっている」のときだけ、1〜2 行で送る。
+3. **実行役（メイン）への引き渡し（毎回）**：解析で分かったこと（ライブの使用率、Z890 の状態、スコープ判定、運用上の問題）は、すべて MONITOR_REPORT.md の先頭に書き、MONITOR_REPORT.md（と変更した MONITOR_START_PROMPT.md・HALT.md）だけを add・commit・`git push origin master` する。実行役は毎回の最初に pull して MONITOR_REPORT.md の最新を読み、指摘を NEXT.md の先頭より先に対応する（LOOP_PROMPT.md）ので、これが引き渡しの経路。「判定が問題なし」でも、使用率・状態・お願い（なければ「なし」）を省略しない。`mcp__ccd_session_mgmt__list_sessions` に実行役のセッションが出ているときは、`send_message` で「MONITOR_REPORT.md に新しい報告（判定、お願いの要点）」を 1〜2 行で知らせる（他のセッション、特に卒論側には送らない）。
+4. 本人への報告は 5 行以内。PushNotification が使えるなら、「要停止」「実行役が止まっている」のときだけ、1〜2 行で送る。
 
 ## 5. やらないこと（厳守）
 - ジョブの停止・削除・再実行、提出、設定の変更、実行役の代わりの作業
