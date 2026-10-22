@@ -19,7 +19,11 @@
 ## 3. 使用量の配分と上限（毎回、最初に確認）
 **配分は、コンペ 4 割・研究 6 割**（本人の指定、2026-10-22）。研究側の 24 時間ループとは、同じ 5 時間枠（アカウント共通。本人の対話の分も含む）を使う。ループごとの消費は測れないので、**共通の使用率 U のしきい値で近似**する。
 
-読み方：`C:\Users\Nakamura\.claude.json` の `cachedUsageUtilization.utilization.five_hour`（`utilization` が %、`resets_at` が次のリセット）（PowerShell：`(Get-Content $env:USERPROFILE\.claude.json -Raw | ConvertFrom-Json -AsHashTable).cachedUsageUtilization`）。`fetchedAtMs` が 30 分以上前なら、U は 35% とみなす（節約に入る）。`seven_day` が表示されるようになったら、同じ表を使い、その `resets_at` で再開する。
+**読み方の優先順位（2026-10-22 改訂）**：①`mcp__ccd_session_mgmt__get_usage`（ToolSearch で `select:mcp__ccd_session_mgmt__get_usage`。**デスクトップアプリがホストするセッションでだけ使える**。VS Code 拡張のセッションには無い）の 5-hour limit の percent と resets_at ／ ②無ければ、MONITOR_REPORT.md の最新の「使用率 U（ライブ値）」（60 分以内のもの。監視役がデスクトップ側で取った値）／ ③無ければ、下の usage_live.json ／ ④それも無ければ、予備のキャッシュ（古いときは U を 35% とみなす）。どれを使ったかを、LOG.md に書く。
+
+**③の詳細：usage_live.json**（statusLine。VS Code 拡張では動かない可能性が高い。2026-10-22 時点で未生成） `C:\Users\Nakamura\.claude\usage_live.json`（statusLine のスクリプト `statusline_usage.ps1` が、30 秒ごとに書く公式の方法。2026-10-22 導入）。`five_hour_pct`（%）、`five_hour_resets_at`（リセット時刻）、`fetched_at`（書いた時刻）。`fetched_at` が **5 分以内なら、これを U とする**。5 分より古い、またはファイルが無いときは、下の「予備」に従う（statusLine は、セッションを開いて応答があるときに動く。本人が全セッションを閉じていると更新されない）。
+
+読み方（予備。ライブ値が無いとき）：`C:\Users\Nakamura\.claude.json` の `cachedUsageUtilization.utilization.five_hour`（`utilization` が %、`resets_at` が次のリセット）（PowerShell：`(Get-Content $env:USERPROFILE\.claude.json -Raw | ConvertFrom-Json -AsHashTable).cachedUsageUtilization`）。`fetchedAtMs` が 30 分以上前なら、U は 35% とみなす（節約に入る）。`seven_day` が表示されるようになったら、同じ表を使い、その `resets_at` で再開する。
 
 | 共通の使用率 U | コンペ側（このループ） | 研究側（提案。SHARED_USAGE_POLICY.md） |
 |---|---|---|

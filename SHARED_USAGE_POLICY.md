@@ -2,6 +2,8 @@
 
 決定：2026-10-22（本人）。コンペ側のループ（RTX5090搭載機の活用-1/-2）と、研究側のループ（歩行解析-1/-2）は、**同じ 5 時間枠（アカウント共通）**を使う。本人の対話の分も、同じ枠から消費される。
 
+**使用率の読み方（2026-10-22 変更）**：`C:\Users\Nakamura\.claude\usage_live.json`（グローバルの statusLine が 30 秒ごとに書くライブ値。コンペ側・研究側で共通）を優先する。`fetched_at` が 5 分以内なら、`five_hour_pct` を U とし、`five_hour_resets_at` をリセットとする。古い、または無いときだけ、下の `.claude.json` のキャッシュに従う。
+
 ループごとの消費は測れないため、**共通の使用率 U のしきい値で近似**する。U は `C:\Users\Nakamura\.claude.json` の `cachedUsageUtilization.utilization.five_hour.utilization`（%）、リセットは `resets_at`。`fetchedAtMs` が 30 分以上前なら、コンペ側は U を 35%（節約）、研究側は 70%（節約）とみなす。
 
 | 共通の使用率 U | コンペ側 | 研究側（この文書の提案） |
