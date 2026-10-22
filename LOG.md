@@ -163,3 +163,10 @@
 - kdata/ntl-lora2-mistral7b-poolv4 を作成（adapter／adapter_config.json・adapter_model.safetensors 168MB、dataset-metadata.json、ライセンスは v1 と同じ CC-BY-SA-4.0＝プール由来）。OLMo 2・Qwen は 90a（約 06:00）・90b（約 08:30）の完了後に同じ形で作る。
 - アップロード（kaggle datasets create）は 08:00 以降。提出も日中のみ（1 日 2 回まで、今日は 0 回）。
 - TF-IDF の fit（ホスト＋pool_v1）は現行のまま。pool_v4（71,925 件）を足す案は、全折の OOF が無いため、今回は行わない。
+
+## 2026-10-23 06:00 90a 完了・90c 投入（使用率：監視 04:48 の 11%＋その後の自分の消費は小。通常運用。実測なし）
+- 90a（OLMo 2 7B、pool_v4、全データ）：05:51 に完了（stage2 の最終ステップ 338／338）。90b（Qwen3-8B-Base 全データ）は同時刻に開始（約 08:20 完了）。
+- kdata/ntl-lora2-olmo2-7b-poolv4 を作成（adapter 160MB、r=16・alpha=32・対象モジュールは v1 版と同じ）。Qwen3-8B-Base は 90b の完了後。
+- 90c（sub10 の T4 相当の手元テスト、GPU_FRAC=0.45、公開プール 4,000 件の擬似テスト）を、tmp → bash -n → mv の手順で投入。90b の後、91 の前に実行される（OOM・欠落・NaN・所要時間の確認用。精度は参考にならない）。90b が失敗した場合は 90c も失敗する（その場合は LOG に書き、直して再投入）。
+- 順序：90b（約 08:20）→ 90c（約 40 分）→ 91（約 09:00 開始、約 14:00 完了）。
+- 08:00 以降：OLMo 2・Mistral（Qwen は 90b の後）の重みのアップロード → 90c の結果の確認 → 提出の判断（条件は S-018）。
