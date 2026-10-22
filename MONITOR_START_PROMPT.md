@@ -14,8 +14,7 @@
 5. C:\Users\Nakamura\comp_project\LOG.md の末尾 5 件、NEXT.md の先頭 3 件、HEARTBEAT.txt
 
 ## 2. 確認する（次のコマンドだけ使う。Kaggle CLI は使わない）
-(a) 使用率（PowerShell）：
-`$u=(Get-Content $env:USERPROFILE\.claude.json -Raw | ConvertFrom-Json -AsHashTable).cachedUsageUtilization; "$($u.utilization.five_hour.utilization)% reset=$($u.utilization.five_hour.resets_at) extra=$($u.utilization.extra_usage.is_enabled)"`
+(a) 使用率：**ライブ値**を `mcp__ccd_session_mgmt__get_usage`（ToolSearch で `select:mcp__ccd_session_mgmt__get_usage` を読み込む）の plan.windows の 5-hour limit（percentUsed と resetsAt）から取る。`.claude.json` の cachedUsageUtilization は古い・不正確（93% や 0%・resets_at null を返した）ので使わない。ツールが使えないときは「使用率不明」と書き、キャッシュ値は参考値としてのみ併記する。
 (b) 実行役の生存：HEARTBEAT.txt の最終更新時刻と本文（`(Get-Item C:\Users\Nakamura\comp_project\HEARTBEAT.txt).LastWriteTime`）
 (c) Z890（読み取りのみ）：
 `ssh Z890 'cat /data/nakamura/comp/status/status.txt; tail -5 /data/nakamura/comp/status/watchdog.log; cat /data/nakamura/comp/status/kaggle_ntl.txt; ls -t /data/nakamura/comp/queue/failed | head -3'`
