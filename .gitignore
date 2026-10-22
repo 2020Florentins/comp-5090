@@ -1,0 +1,16 @@
+# 秘密情報・重み・データ・ログの全文は入れない（RULES_24H.md の 13）
+*.key
+*.pem
+*token*
+.kaggle/
+models/
+*.safetensors
+*.bin
+*.pt
+*.gguf
+*.parquet
+*.csv
+data/
+logs/
+*.log
+.env
