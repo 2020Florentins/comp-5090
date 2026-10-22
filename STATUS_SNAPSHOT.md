@@ -1,16 +1,16 @@
 # STATUS_SNAPSHOT（チャット-1 が毎回上書き。独立した確認ではない）
-時刻：2026-10-22 17:52
+時刻：2026-10-22 21:20
 
 ## Z890 status.txt
-time: 2026-10-22 17:52:08
-gpu_util: 99%  gpu_mem_mb: 25686
-job_running: 2  pending: 2  backlog: 0  gpu_idle_min: 0
+time: 2026-10-22 21:17:20
+gpu_util: 0%  gpu_mem_mb: 2
+job_running: 0  pending: 0  backlog: 0  gpu_idle_min: 5
 disk_free(/data): 4.8T
 --- runner.log (tail)
-2026-10-22 14:18:35 done 83_gemma_v0_rr61
-2026-10-22 14:18:35 start 84_gemma_v1_rr61_retry
-2026-10-22 16:49:54 done 84_gemma_v1_rr61_retry
 2026-10-22 16:49:54 start 85_mistral_v03_h0_poolv4
+2026-10-22 19:06:16 done 85_mistral_v03_h0_poolv4
+2026-10-22 19:06:16 start 86_gemma_v2_rr61
+2026-10-22 21:13:03 done 86_gemma_v2_rr61
 --- failed (latest 3)
 82_gemma_v1_rr61.sh
 73_mistral_v01_full_poolv1.sh
