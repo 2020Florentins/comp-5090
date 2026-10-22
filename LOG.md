@@ -121,3 +121,19 @@
 - 次：（NEXT.md に追加した項目）
 - 状態：GPU／ジョブ／提出枠
 ```
+
+## 2026-10-23 02:12 S-015 途中経過（使用率：キャッシュは昨日 21:10 の古い値のため不使用。本人の連絡で 02:10 にリセット済み、U は低いとみなす）
+- 訂正：「ホストの site-packages が検証環境」という仮説は誤り。ハーネス（container_setup.py）は wheels ディレクトリの cp313 wheel をコンテナの /usr/local/lib/python3.13/site-packages に展開する。
+- .venv_harness2（base 169 pin）を足しても fastapi 0/4・requests 0/4（urllib3 無し）のままだった理由は、これ。競技の wheels/（124 個）に typing_inspection・urllib3 等が無い。
+- 対応：env_base_requirements.txt の各 pin の cp313 wheel を gemma4/wheels_extra/ に取得中（Z890、dl_wheels.sh）。取得後、競技の wheels と合わせて、ゴールドパッチの検証を再実行する。
+- ミス：ssh -n と heredoc を併用して、最初のダウンロードは何も実行されなかった（-n は stdin を /dev/null にするため）。
+
+## 2026-10-23 02:55 S-015 結論（使用率：実測なし。キャッシュ 5.5 時間前のため 35% とみなし、節約モード。リセット 02:10 後の本人の連絡あり）
+- 結論：**公式の harness のままでは、114 件（fastapi 62 件）は再現できない**。成功基準（fastapi 62 件のうち 55 件以上）は未達。再現できる範囲を測った（下）。
+- 原因の訂正：①スイープ（sample_verification）は config を渡さず、wheels と sandbox/setup.py を探せない（"setup.py not found"）。実評価（Evaluator）は config を渡すので、スイープでは判定できない。→ 実評価と同じ経路で、エージェントの代わりに正解パッチを返す評価器（gemma4/gold_eval.py、検証キットの GoldEvaluator と同じ作り）で測り直した。
+- ②競技の wheels と、公式の sandbox/setup.py は、どちらも「各パッケージの最新版を 1 つ選ぶ」仕様。starlette は 1.6.0 が入り、古い fastapi（on_startup を使う版）は import で落ちる。fastapi の sound 62 件のうち 45 件がこれ。本採点の環境（非公開）は別のため、手元で版を差し替えて合わせる意味は薄い。公式の仕様のまま、通る分だけを使う。
+- ③足りないパッケージを足した派生イメージ（新しいタグ。元のイメージは変更なし）：swegemma-public:local3 = typing_inspection、pytest-httpbin、dirty-equals、httpx2（rich・requests・httpx 用）／ local4 = local3 + inline-snapshot、python-multipart、email-validator、ujson、orjson（fastapi 用）。**inline-snapshot を入れると rich の全テストが落ちる**（pytest プラグインが examples/attrs.py を import して SystemExit）。そのため、イメージは repo 別に使い分ける。
+- 正解パッチが通る数（実評価の経路）：rich 38 件／48（Pygments の版が合わない 9 件は不通過）、requests 3 件／13（残りは urllib3 や、ネットワーク無しの影響）、httpx 0／1、fastapi 16 件／67（local4）。rr61（rich 48 + requests 13）のうち、通るのは **41／61**。
+- 含意：これまでの rr61 の評価（v0 15、v1 9、v2 16）は、解ける 41 件のうちの数。v0 は 15／41（37%）。解けない 20 件は常に 0 のため、v0・v1・v2 の比較（対応あり）には影響しない。絶対値の解釈だけ、分母を 41 にする。
+- 評価に使えるタスク（正解パッチが通る）：results/valid_ids_local3_nonfastapi.txt（41 件）と、results/valid_ids_local4_fastapi.txt（16 件）。合計 57 件。fastapi を足す場合は、local4 で別の実行にする（repo 別のイメージ）。
+- ミス：①ssh -n と heredoc の併用（最初のダウンロードが無実行）。②pkill -f を ssh のコマンドに含めて、自分の ssh を落とした。③inline-snapshot を全体に入れて rich を壊した（local4 は fastapi 専用）。
