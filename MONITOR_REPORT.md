@@ -1,5 +1,11 @@
 # 監視報告（新しいものを上に）
 
+## 2026-10-23 06:50 JST の監視（ローカル＋Z890 読み取り）
+- 判定：問題なし。使用率 15%（ライブ値、5h 窓、リセット 07:10 JST、extra_usage 無効）
+- 状態：HEARTBEAT 06:48（正常）。HALT なし。Z890 06:47：GPU 96%、90b（Qwen3-8B-Base）実行中、pending 3、disk 4.8T、failed は既知の 82・73・72 のみ。夜間の外部書き込み・提出なし
+- 注意点：status/kaggle_ntl.txt が「Authentication required」を返しており、Kaggle 最新スコアを確認できない（status 取得側のトークン未設定の可能性）。job_running=2 も継続
+- 実行役へのお願い：「35% とみなす」節約は不要（実測 15%）。get_usage で実測して通常運用に。kaggle_ntl.txt の認証エラーの原因確認
+
 ## 2026-10-23 04:48 JST の監視（ローカル＋Z890 読み取り）
 - 判定：問題なし。使用率 11%（ライブ値、5h 窓、リセット 07:10 JST、extra_usage 無効）
 - 状態：HEARTBEAT 04:02（約 46 分前、正常）。HALT なし。Z890 04:47：GPU 99%、90a（OLMo2 全データ）実行中、pending 3、disk 4.8T、failed は既知の 82・73・72 のみ。Kaggle 最新 0.563（LOG と一致）。夜間の外部書き込み・提出なし。S-010・S-016 の記録は妥当
