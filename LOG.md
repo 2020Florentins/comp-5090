@@ -351,3 +351,8 @@
 ## 2026-10-24 07:34 ループ（使用率：監視 06:48 のライブ値 25%、46 分前、優先順位②。30% 未満で通常。リセット 08:40。夜間のため外部書き込み・提出なし。記録のみ）
 - 101（Mistral v0.3、検証グループ 3、pool_v4）：06:51:40 に完了。after_stage1 0.5630、after_stage2 **0.6148**（検証グループ 0 は 0.5815、1 は 0.5889、2 は 0.6056）。102（OLMo 2 h3）は 06:51 に開始（約 09:05 完了）。続いて 103〜106。約 17:40 に全完了。新しい失敗なし。
 - Kaggle のトークン（P-009）：07:34 時点でも認証エラー。08:05 に、08:00 以降の最初の確認を行う。
+
+## 2026-10-24 08:06 ループ（08:00 以降の最初の確認）（使用率：監視 06:48 の 25% は 78 分前で無効。リセット 08:40 の前で、窓の終わり。実測なし。通常運用の範囲）
+- Kaggle のトークン（P-009）：08:04 時点でも認証エラー。本人の返信なし。**提出可能な時間（08:00〜22:00）に入ったが、トークンが無効のため、アップロード・提出はできない**。今日（10/24）の提出：0 回。
+- トークンが戻った場合の手順（kaggle CLI 2.2.4、arc-agi-3 の仮想環境、確認済みのオプション）：①kaggle datasets list --mine -q でトークンの有効性を確認 → ②kaggle datasets create -p kdata/ntl-lora2-{8bbase,olmo2-7b,mistral7b}-poolv4 -r zip（非公開、各約 170MB）→ ③kaggle datasets status natakumi/<slug> が ready になるまで待つ → ④kaggle kernels push -p sub10/push（非公開カーネル natakumi/ntl-ens4-poolv4、GPU、インターネットなし、TF-IDF は ahmedberatozer/ntl-pool-v4 を使う）→ ⑤kaggle kernels status natakumi/ntl-ens4-poolv4 が complete になるまで待つ（約 50〜60 分）→ ⑥kaggle competitions submit name-that-llm -k natakumi/ntl-ens4-poolv4 -f submission.parquet -v <版> -m "<説明>"（今日 1 回目。公開スコアでの確認が目的。説明に pool_v4・TF-IDF×1.0・3 折で +0.034 を書く）。提出は 22:00 まで、1 日 2 回まで。
+- 102（OLMo 2 h3）：stage1 の 2875／4496（08:04）。約 09:05 に完了。続いて 103〜106。約 17:40 に全完了。新しい失敗なし。
