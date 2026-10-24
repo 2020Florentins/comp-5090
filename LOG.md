@@ -356,3 +356,7 @@
 - Kaggle のトークン（P-009）：08:04 時点でも認証エラー。本人の返信なし。**提出可能な時間（08:00〜22:00）に入ったが、トークンが無効のため、アップロード・提出はできない**。今日（10/24）の提出：0 回。
 - トークンが戻った場合の手順（kaggle CLI 2.2.4、arc-agi-3 の仮想環境、確認済みのオプション）：①kaggle datasets list --mine -q でトークンの有効性を確認 → ②kaggle datasets create -p kdata/ntl-lora2-{8bbase,olmo2-7b,mistral7b}-poolv4 -r zip（非公開、各約 170MB）→ ③kaggle datasets status natakumi/<slug> が ready になるまで待つ → ④kaggle kernels push -p sub10/push（非公開カーネル natakumi/ntl-ens4-poolv4、GPU、インターネットなし、TF-IDF は ahmedberatozer/ntl-pool-v4 を使う）→ ⑤kaggle kernels status natakumi/ntl-ens4-poolv4 が complete になるまで待つ（約 50〜60 分）→ ⑥kaggle competitions submit name-that-llm -k natakumi/ntl-ens4-poolv4 -f submission.parquet -v <版> -m "<説明>"（今日 1 回目。公開スコアでの確認が目的。説明に pool_v4・TF-IDF×1.0・3 折で +0.034 を書く）。提出は 22:00 まで、1 日 2 回まで。
 - 102（OLMo 2 h3）：stage1 の 2875／4496（08:04）。約 09:05 に完了。続いて 103〜106。約 17:40 に全完了。新しい失敗なし。
+
+## 2026-10-24 09:03 ループ（使用率：監視 08:48 のライブ値 0%、15 分前、優先順位②。08:40 のリセット直後。通常運用。記録のみ）
+- 102（OLMo 2、検証グループ 3、pool_v4）：08:54:32 に完了。after_stage1 0.5500、after_stage2 **0.6111**。103（Qwen h3）は 08:54 に開始（約 11:05 完了）。続いて 104〜106。約 17:40 に全完了。新しい失敗なし。
+- Kaggle のトークン（P-009）：09:03 時点でも認証エラー。本人から「Kaggle にログインできなくなった」との連絡あり（09:00 ごろ）。アカウントのメール note_pencil@icloud.com、ユーザー名 natakumi を案内済み。ログインとトークンの再発行は、本人の操作。トークンが戻り次第、LOG の手順で、アップロードから提出まで進める（提出は 22:00 まで）。
