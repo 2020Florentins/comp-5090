@@ -141,3 +141,6 @@ failed（新しい 3 件、LOG に記載済み）：82_gemma_v1_rr61、73_mistra
 
 - 18:47：リセット 18:40 後。監視 18:48 の実測待ち。status.txt 18:44:34：GPU 遊休、新しい失敗なし。Kaggle：審査中（P-009）。
 
+
+- 19:12：S-022：Gemma の提出物 v0_base・v2_fast がオフラインの形式検証を通過。提出手順の下書き（GEMMA_SUBMIT_PLAN.md）を作成。status.txt 19:09:34：GPU 遊休、新しい失敗なし。使用率 2%（監視 18:48）。Kaggle：審査中（P-009）。
+
