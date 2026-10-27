@@ -723,3 +723,9 @@
 ## 2026-10-28 08:52 S-041：Gemma の最小カーネルを push（日中、使用率 38%＝監視 08:50 のライブ値、3 分前で有効、40% 目前のため呼び出しを最小限）
 - kaggle kernels push -p gemma4/sub_kernel_v0：version 1 を受理。**実際の識別名は natakumi/gemma4-v0-base-packaging**（タイトル "Gemma4 v0 base packaging" から Kaggle が決めた。メタデータの id は natakumi/gemma4-v0-base だったため、警告「title does not resolve to the specified id」が出た。status を id で呼ぶと権限エラー）。以後の status・submit は gemma4-v0-base-packaging を使う。
 - 完了までの確認は、5 分間隔のバックグラウンド（最大 70 分）。完了したら、kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v0-base-packaging -f submission.zip -v 1 -m "v0_base (packaging kernel)"。使用率が 40% 以上なら、09:20 のリセットの後に提出する。
+
+## 2026-10-28 08:57 **S-041：Gemma v0_base を提出（受理）**（日中。使用率 38%＝監視 08:50、9 分前で有効）
+- カーネル natakumi/gemma4-v0-base-packaging（version 1）は 08:56 に complete（約 5 分）。提出：kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v0-base-packaging -f submission.zip -v 1 -m "v0_base (packaging kernel)" → 応答「0 submissions remaining today」。提出一覧で、**提出 ID 57716043、状態 PENDING（受理）**を確認。**推論を省いた最小カーネルでも受理された**（スターターに近い形に戻す必要は無し）。
+- **Gemma の 1 日の提出上限は 1 回**（今日の残り 0）。次の提出は、10/29 以降（日本時間では 9:00 ごろ以降。Kaggle の日付の区切りは UTC 0:00＝日本時間 9:00 と見られる。未確認）。
+- 採点：非公開の約 120 件を競技側が実行（所要は未知。数時間〜半日と見られる）。公開スコアは、状態が COMPLETE になってから 1 回確認する（確認は 2 時間おき以上）。
+- 次：結果が出るまで、v2_fast など別案の提出はできない（1 日 1 回）。L2 の完了条件「提出して公開スコアを得る」は、スコアが付けば達成。
