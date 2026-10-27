@@ -701,3 +701,10 @@
 - **方針の変更（S-039）**：当初案（sub10 の予測の一部を定数クラスに置き換えて提出し、スコアの低下から、テストの行数・クラスタの大きさを読む）は、**行わない**。Kaggle のルールのページを WebFetch で読めず（本文が取れない）、公開スコアの探査（probing）の可否が不明で、アカウントはペナルティからの復旧直後（理由は不明）のため、リスクが見合わない。P-017（本人への確認）は、任意のまま残す（本人が問題なしと確認すれば、再検討）。
 - **訂正（S-040）**：NEXT の S-040 に「ジョブ 91 は失敗済み。原因を確認して再投入」と書いたのは不正確。91 は、段階 1 が 10171 ステップで、ランナーの 5 時間の上限に入らないため、私が 10/23 09:07 に止め、短縮版の 92 で merged_v2 を検証済み（after_stage2 0.5704、pool_v4 の 0.5815 より −0.011、効果なし、LOG 10/23 11:50）。再投入しない。
 - **距離（更新）**：現在の最良は公開 0.600（sub10）。銅 0.629 まで −0.029。割り当てが使えないため、上積みの手段は、スコア側（10 方向が +0.01 以下で頭打ち）のみ。銅圏の確率は、約 3〜5% に下げる（粗い見積もり）。
+
+## 2026-10-28 01:00 S-041 の事前準備：Gemma 提出用の最小カーネルを Z890 に作成・手元で検証（外部書き込みなし）
+- スターターのノートブック（推論 1・2 段階を含む）を読み、提出物の作成に必要な部分だけに絞った**最小カーネル**を作成：gemma4/sub_kernel_v0/（gemma4-v0-base.ipynb、kernel-metadata.json。id natakumi/gemma4-v0-base、非公開、GPU L4、インターネット無し、入力はスターターと同じ：wheelhouse、4 種のモデル、競技）。生成スクリプトは gemma4/build_gemma_kernel.py（subs/v0_base と v2_fast に使える）。
+- 内容：①スターターの環境設定セル（wheelhouse のインストール）②v0_base の 6 ファイル（5,392 バイト）を /kaggle/working/agent に書く ③公式の validate_directory・単一モデル・許可リスト・拡張子・3 GiB の検査 ④submission.zip を作る。推論は行わない。
+- 手元の試験（.venv_harness、WORKDIR を差し替えて、セル 2・3 を実行）：validate_directory OK、宣言モデルは 31B の 1 種類、zip 9 エントリ・展開後 5.3 KiB・agent.yaml がルート、submission.zip 3,775 バイト。→ コードは動く。**未確認（Kaggle の公式の流れ）**：①この最小カーネルの出力 zip で、competitions submit -k が受理されるか（推論セルを省いても可か）②採点の所要時間 ③1 日の提出の上限。朝、push して RUNNING/COMPLETE を確認 → submit の応答（受理・エラー文）で確認する。受理されない場合は、スターターに近い形（推論セルを含む）に戻す。
+- 試験の作業ディレクトリ gemma4/_ktest/（agent と submission.zip、数 KB）が残っている。削除は本人の確認が要るため、そのまま残す。
+- 朝（08:00 以降）の手順：①kaggle kernels push -p gemma4/sub_kernel_v0 ②status が complete になるまで待つ（5 分間隔以上）③kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v0-base -f submission.zip -v 1 -m "v0_base (packaging kernel)" ④公開スコアは、採点の後に 1 回確認。NTL 側の提出枠とは別（競技ごと）。
