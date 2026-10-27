@@ -719,3 +719,7 @@
 - **S-003（M1-2）**：Qwen3-14B（後学習版、手元）を 4bit（nf4、二重量子化、bf16 計算）＋LoRA r16 で、学習の試験（ジョブ 116、段階 1 を 54 ステップ、段階 2 を数ステップ、検証 540 件の評価。精度は参考にならない）：**4bit 読み込み後 7.84 GB、学習中のピーク 13.0 GB**（32 GB に余裕）、**約 2.6 秒／ステップ**（7B 級の fp16 は約 2.06 秒）。評価も完走。→ 実現性あり。最初のジョブ 115 は、venv_bnb に pandas・scikit-learn・pyarrow が無く失敗（GPU は使用前）。pip で導入して 116 を投入（115 は failed/ に残る）。
 - **投入**：ジョブ 117（Qwen3-14B-Base、28 GB を HF から models/Qwen3-14B-Base に取得済み、4bit、段階 1＝pool_v4 の 4,496 ステップ、段階 2＝ホスト 2 エポック、検証グループ 0）。07:03 開始、約 3.5 時間（10:35 ごろ完了の見込み）。基準：同じ設定の Qwen3-8B-Base の段階 2 後 0.5593（OLMo 2 0.5796、Mistral 0.5815）。成功基準：単体で 0.58 以上（8B より +0.02）、かつ 3 モデルの合成に足して検証グループ 0 で +0.01 以上の見込みが立てば、折 1〜4 に拡張（各約 3.5 時間）。そうでなければ止める。
 - **Kaggle 側の実現性（未確認）**：推論は T4（15 GB）。14B の fp16（28 GB）は載らない。4bit で載せるには、学習後に、LoRA を fp16 の基盤に統合 → 再度 4bit に量子化 → 保存（bnb の 4bit の保存形式）→ Kaggle にアップロード、が候補。Kaggle の環境に bitsandbytes があるか、時間制限に収まるかは、実際のカーネルで確かめるまで不明。精度が出た場合のみ着手。
+
+## 2026-10-28 08:52 S-041：Gemma の最小カーネルを push（日中、使用率 38%＝監視 08:50 のライブ値、3 分前で有効、40% 目前のため呼び出しを最小限）
+- kaggle kernels push -p gemma4/sub_kernel_v0：version 1 を受理。**実際の識別名は natakumi/gemma4-v0-base-packaging**（タイトル "Gemma4 v0 base packaging" から Kaggle が決めた。メタデータの id は natakumi/gemma4-v0-base だったため、警告「title does not resolve to the specified id」が出た。status を id で呼ぶと権限エラー）。以後の status・submit は gemma4-v0-base-packaging を使う。
+- 完了までの確認は、5 分間隔のバックグラウンド（最大 70 分）。完了したら、kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v0-base-packaging -f submission.zip -v 1 -m "v0_base (packaging kernel)"。使用率が 40% 以上なら、09:20 のリセットの後に提出する。
