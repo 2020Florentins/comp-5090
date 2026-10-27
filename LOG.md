@@ -708,3 +708,8 @@
 - 手元の試験（.venv_harness、WORKDIR を差し替えて、セル 2・3 を実行）：validate_directory OK、宣言モデルは 31B の 1 種類、zip 9 エントリ・展開後 5.3 KiB・agent.yaml がルート、submission.zip 3,775 バイト。→ コードは動く。**未確認（Kaggle の公式の流れ）**：①この最小カーネルの出力 zip で、competitions submit -k が受理されるか（推論セルを省いても可か）②採点の所要時間 ③1 日の提出の上限。朝、push して RUNNING/COMPLETE を確認 → submit の応答（受理・エラー文）で確認する。受理されない場合は、スターターに近い形（推論セルを含む）に戻す。
 - 試験の作業ディレクトリ gemma4/_ktest/（agent と submission.zip、数 KB）が残っている。削除は本人の確認が要るため、そのまま残す。
 - 朝（08:00 以降）の手順：①kaggle kernels push -p gemma4/sub_kernel_v0 ②status が complete になるまで待つ（5 分間隔以上）③kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v0-base -f submission.zip -v 1 -m "v0_base (packaging kernel)" ④公開スコアは、採点の後に 1 回確認。NTL 側の提出枠とは別（競技ごと）。
+
+## 2026-10-28 04:59 S-040 の検証を開始：テスト文章を使った TF-IDF の適応（自己訓練）。使用率 3%（監視 04:50、有効）。CPU のみ・外部書き込みなし
+- 閉じた方向：①文章の切り詰め（最長 約 1,900 文字＝約 340 トークンで、最大長 448 に収まる。テスト時の複数窓は不要）。
+- 検証：cv_selftrain.py（Z890、新規）を 5 折並列で実行（ログ cv_selftrain_h{0..4}.log、結果 cv_selftrain_h{f}.npz）。各折（540 件をテストに見立てる）で、TF-IDF＋LR（ホスト＋pool_v4）に、A：テスト文章を語彙・IDF の学習に含める、B：A＋合成の確信度が上位 50% の疑似ラベル、C：A＋全件の疑似ラベル、を比べる。基準は、合成（3 モデル＋TF-IDF）の折ごとの BA 0.6407／0.6074／0.6333／0.6444／0.6416。疑似ラベルの正解率は、上位 50% で 0.81〜0.85（全件で 0.61〜0.64）。
+- 判定の基準：5 折の平均で +0.01 以上かつ、折ごとの符号がそろえば、sub13（候補）に採用。標準誤差の範囲（約 0.007）なら不採用。
