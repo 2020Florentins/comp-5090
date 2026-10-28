@@ -758,3 +758,10 @@
 - 作成（Z890、手元で試験済み）：opus_gemma/sub_kernel_v0_safe/（id natakumi/gemma4-v0-safe-packaging、build_gemma_kernel.py で生成。書き込み・検証・zip を通過、4,080 バイト）。**10/29 の 09:00 以降に、v0_base の結果（スコアか、エラーか）を見てから、push → complete → submit**。
 - **本番相当の評価器の実装を、Opus 5.5（xhigh）に依頼**（21:50、約 60 分）：opus_gemma/eval_faithful.py、summarize_faithful.py、queue/tmp/120_gemma_faithful_v0safe_valid41.sh（pending には入れない）。GPU の実行はしない（119 が使用中）。完成後に、私が確認して投入（v0_safe を 41 件・並行 1・約 2.5 GPU 時間。要約の回数と 1 件の平均時間を測る）。
 - 未決（NEXT に S-048）：検証タスク 165 件（35 リポジトリ、Z890 の pub/soundness/validation_tasks.jsonl）の環境構築には、GitHub と PyPI からの取得が要る（費用なし）。外部ネットワークの使用の可否は、本人の判断（Opus の提案）。
+
+## 2026-10-28 21:46 本番相当の評価器（Opus 5.5 xhigh の実装）を受領・確認し、ジョブ 120 を投入（119 の完了後に自動で開始）
+- 作成物（Z890、新規）：opus_gemma/eval_faithful.py（640 行）、summarize_faithful.py（307 行）、queue ジョブ 120_gemma_faithful_v0safe_valid41.sh。報告：py_compile・bash -n と、GPU 無しの dry-run（v0_safe・41 件で EvalConfig の組み立て、モデル登録、要約の設定、提出物のコンパイル、App の生成）が通る。eval_config はスターターのセル 10 と同じ規則で読む（v0_safe は 120 秒・30 回・7 分・80 ターン）。要約（15・2・14336・5）とキャッシュ（2048・1800・10）を渡す。**要約の回数**は、ADK が要約イベントを軌跡に残さない（CLI では常に 0 件）ため、要約器を包んで faithful/compactions.jsonl に記録し、軌跡にも書き込む（偽の LLM で 1 回起こして確認）。summarize_faithful.py は、既存の v0 の 41 件（CLI）にかけ、レビューの値（解決 15、不正解 20、文脈超過 2、閾値到達 35 件）と一致。
+- **私の確認**：ジョブ 120 のスクリプトを通読（vLLM の起動引数はジョブ 114 と同じ、評価、集計、trap で vLLM の停止まで含む。結果が既にあれば中止）、bash -n OK、py_compile OK。41 件の ID は既存の results/valid_ids_local3_nonfastapi.txt（valid41_a＋b と同一と、Opus が照合）。
+- 投入：120 を pending に移した（22:20）。119（Mistral e1=1.6、7,193 ステップ、1.71 秒／ステップ、約 3.4 時間）は 01:00 ごろに完了し、続いて 120 が開始（約 2.5 時間、最悪 5 時間の打ち切りに近い）。10/29 04:00 ごろには、v0_safe の 1 件の平均時間と要約の回数が得られる。09:00 の提出の予算（7 分か、より小さいか）の判断材料にする。
+- **作業範囲の注記（Opus の報告、正直に記録）**：実装中に、Z890 の /tmp（作業場所 /data/nakamura/comp/ の外）に一時ファイルを 2 個作り、すぐ消した（ID の照合のため）。自分で作った summarize_faithful.py を試験後に 1 回上書きした（新規作成物のため問題なし）。既存ファイルの変更は無し。opus_gemma/__pycache__/ に .pyc が 2 個できている（py_compile の副産物。削除は本人の確認が要るため残す）。
+- **未確認の点（Opus の報告）**：vLLM の 3 引数（--reasoning-config、--no-scheduler-reserve-full-isl、使用率 0.90）は 114 にそろえて付けていない。思考の区切りの文字列が一致するかは未確認。手元の vLLM 0.32 と wheelhouse の 0.19.1 の差、本番の inference.py とサンドボックスの実体、ContextCacheConfig が LiteLlm で効くかも未確認。
