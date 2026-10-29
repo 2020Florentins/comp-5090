@@ -839,3 +839,10 @@
 - 実装の要点（学習 gen_lm_h0.py と一致させた点）：前置きと本文を別々にトークン化してつなぐ（本文は最大 448−最長の前置き−1 トークン）、損失・尤度の対象は本文＋EOS の位置だけ、出力層は 1,024 位置ずつ float32 で log_softmax、OOM は文章の半分に分けて再試行。T4（15 GB）では、既存と同じ accelerate の dispatch（GPU 9 GiB＋CPU）。fp16（学習は bf16）。
 - **未検証**（これから）：①LoRA のキー名（base_model.model.model.layers…）での統合が正しいか（merged lora modules の数と、SIM の精度で確認）②fp16 の数値（Qwen3 の分類器は fp16 で問題なし）③T4 相当での所要時間。→ **ジョブ 1246**（1245 の後に自動実行）：検証グループ 0 を擬似テストに、GEN=1 と GEN=0 を同じ設定（GPU_FRAC=0.45）で測り、精度の差（期待 +0.03 前後）と所要時間（GEN=1 と 0 の差が生成型の費用）を出す。
 - ジョブの見通し：1241（折 1）は段階 2 が 1.7 秒／ステップで、1 本 約 14 分。1241〜1245 が 09:20 ごろ、1246 が 10:40 ごろ完了の見込み。5 折の判定（09:20 以降）→ 採用なら、生成用 LoRA（opus_ntl/genlm_8bbase_full/stage2）の非公開データセット（ntl-genlm-8bbase-full、adapter/ に置く）を作成し、sub13 を push → 提出（M1-4 の条件：OOF の上積みと、T4 相当の試験の通過）。
+
+## 2026-10-29 09:01 **Gemma：提出が 400 になる原因が判明。「採点待ちは 1 件まで」の制限**（v0_base が 33 時間 PENDING のため、v0_safe を出せない）
+- 09:00:22 の v0_safe の再提出も 400。Python API（kaggle.api.competition_submit_code）で、エラー本文を取得：**「Submission not allowed: Your team already has 1 pending submissions; please wait for one to finish scoring.」（FAILED_PRECONDITION）**。→ **採点待ち（PENDING）の提出は、同時に 1 件まで**。**v0_base（ID 57716043、10/28 08:57 提出）が約 33 時間 PENDING のまま**で、v0_safe を含む次の提出を止めている。UTC の日付や 24 時間の仮説は不要（外れ）。
+- 提出のキャンセルの API は、kaggle の Python API に無い（cancel 系のメソッドなし）。**Kaggle の Submissions ページでのキャンセルの可否は不明**。
+- **私の判断（推奨）**：v0_base を待つ（キャンセルしない）。理由：①採点は、共用の評価機（L4×4）の待ち行列に並んでいる可能性が高く、v0_base が先頭に近い（33 時間待った）。キャンセルして v0_safe を出し直すと、最後尾に並び直す恐れ。②v0_base は 20 分・60 回の予算で、12 時間を超えると 0 点になる恐れ（Opus の見積もり）があるが、実行中かどうかは見えない。③キャンセルは取り消せない。
+- **今後の運用**：Gemma は、1 件の採点に 1 日以上かかる（33 時間＋）ため、12/2 までに出せる回数は多くない（約 10〜15 回）。**出す版は、本番相当の評価器（eval_faithful.py）で十分に選別してから**出す。v0_safe を、v0_base の完了後の最初の提出とする。待ち時間は、候補の改善（本番相当の評価）に使う。
+- 記録：P-021（本人への任意の依頼）：Kaggle の「Gemma 4 Developer Agent」の Submissions ページで、v0_base の状態（Queued／Running／その他）と、見込みの所要時間が表示されるかを見て、教えてください。また、評価の待ち行列や所要時間についての Discussion の情報があれば。
