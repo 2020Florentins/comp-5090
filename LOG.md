@@ -898,3 +898,4 @@
 - 公開ノート（投票順の上位）：avazaku「0.651 Verified Reproduction」、alexchilton「0.654: Full Ensemble + What Failed」、lightningv08「0.652 | Qwen3.8-27B LoRA + Spectral Ensemble」「0.642 | LoRA + Llama + Qwen3.8-27B」、josephadamski91「Teach the Model + 10% ATLAS」、kirilltym「0.642 | Teach More, Keep the Signature」、prvsiyan「The Prompt Is Not the Author」など。
 - 前提の訂正：これまでの「銅 0.629」（10/26 ごろの値）は古い。**銅まで −0.027**（0.624→0.651）。公開ノートの写しで 0.651〜0.660 が誰でも取れるため、終盤の銅のラインはさらに上がる見込み。
 - 対応：本人の指示（Web 検索・コーディングで今後の計画を立てる、ワークフロー利用）で、計画づくりのワークフロー（wf_27b1550d-3fc、10 エージェント：公開ノートの精読×2、Web・論文、データセット・公開重み、自前の誤り分析、実行環境・規約 → 計画案×3 → 統合）を起動。Kaggle は読み取りのみ、GPU は使わない（1260 が使用中）。
+- 2026-10-29 15:23 保険の定期実行で再開（HEARTBEAT が 99 分前。利用上限で 14:00〜15:20 に停止、計画のワークフローは 10 本中 2 本のみ完了）
