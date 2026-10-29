@@ -932,3 +932,10 @@
 - S-063 r2（ワークフロー wf_37dc19e6-445 の修正）：absorb/v31_nollama_r2/。ATLAS の停止は既定（ATLAS_LEGACY_STOP=1）で V31 の規則のまま（元と r2 の atlas_scores を仮想時計で 1,260 条件実行し全一致）。行数上限 3,200 と非常停止 8.1h は変種（legacy=0）だけ。PSEUDO_TEST=0・legacy=1 のとき採点に効く差は Llama の除去 3 か所（CHANGES_vs_v31.diff のブロック 3・4・17）と kernel_sources の Llama の供給元だけ。独立の再確認エージェントは利用上限で失敗したため、私が差分の表・kernel-metadata（非公開、依存 29 件、machine_shape T4）・Llama の残り（コメント 3 行のみ）を確認。注意：Llama を外すと前段が約 56 分速くなり、時間に依存する ATLAS の停止のもとで処理行数が V31 と変わり得る（コードの差ではない）。docker_image は V31 の BYOD のまま（私たちのアカウントで受け付けるかは push まで不明）。
 - S-065：公開 v5 アダプタ（nlm-l24-adapters-v5、許諾 other、解析用）。一括ダウンロードは黙って失敗（空）、1 ファイルずつは可。ジョブ 1300（01:25 開始）：q8v5・q14v5 の 5 折＋全データ（12 本）を 1 ファイルずつ取得し、V31 の l24_predict を ast で取り出してそのまま使い（absorb/v5_oof/s065_v5_train_logits.py）、train 2,699 件の plain ヘッドの対数確率を保存。分析は absorb/v5_oof/s065_analyze.py（プロンプトごとの未学習の折の逆算、代理 OOF の単体 BA、V5＝3·q14＋2·q8 に生成型や S を足した入れ子 OOF）。
 - 試験用の出力：absorb/v5_ds/test1（heads.pt 1 個、5MB）。
+
+## 2026-10-30 02:25 **S-065：1300 は失敗（%%writefile の行）。再投入は安全判定で拒否 → 外部のコードを実行しない自前の実装に切り替え、ジョブ 1302 で開始**
+- 1300（01:25〜01:29）：アダプタ 12 本の取得（1 ファイルずつ、計 1.7GB、absorb/v5_ds/）は完了。推論は、V31 のセルの先頭行 %%writefile を ast で解析しようとして SyntaxError で失敗。
+- 修正して再投入しようとしたところ、Claude Code の自動の安全判定が「外部のコードの実行（Code from External）」として拒否。原因：公開ノート（V31）の関数を取り出して手元で exec する方式だった。判定は回避せず、方式を変えた。
+- 自前の実装 absorb/v5_oof/s065_v5_own.py：V31 のコードは実行しない。読み出しの手順（層を keep 本に切った基盤、LoRA の統合、指定層 [2,4,6,8,12,16,20,24] のマスク付き平均（先頭トークンを除く）、層ごとの LayerNorm、連結、plain ヘッド）だけを参考に自分で書いた。重みは safetensors と torch.load(weights_only=True)（任意コードを実行しない読み込み）だけで読む。CPU の確認：heads.pt はテンソルだけの辞書（centered・norms・plain）、LoRA は 8B が 168 個（24 層×7）、14B が 189 個（27 層×7）すべて対応、meta.json は無い（ラベル順は 18 クラスの辞書順と仮定し、全データ版の train の正解率で確かめる）。統合の丸めを持ち越さないよう、アダプタごとに基盤を読み直す。ジョブ 1302 を 02:25 に開始（約 1〜1.5 時間）。分析 s065_analyze.py は自前の出力（*_train_plain_own.npy）を読むように変更。
+- 記録：これまでに、S-063 のエージェントが CPU の検証で V31 のコードの一部（ATLAS の停止の関数、探索の関数）を模擬の入力で実行している（absorb/cpu_test、verify_s063*）。モデルや重みは読んでいない。今後、公開ノートのコードは手元では実行しない（読む・差分を取るだけ）。Kaggle 上での実行（S-066 の非公開カーネル）は Kaggle の環境で動くため、この制限の対象外と考えるが、本人に報告する。
+- 残った試験用の出力：absorb/v5_oof/s065_v5_train_logits.py（使わない）。
