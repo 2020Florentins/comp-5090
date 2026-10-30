@@ -1023,3 +1023,9 @@
 - ログ（absorb/push_sub15i/out_v2/）：入力の探索 17 秒、comp stack 2,205 秒、infer.py 2,713 秒（見本 3 行、生成型「gen added: lambda 0.25 k 5 rows 3」104 秒、ATLAS の行なし＝外れている）、合計 4,940 秒。submission.parquet（3 行）を出力。
 - natakumi/ntl-v31-nollama v1（V31 単体）はコミット実行中。
 - S-082（pool_v5 で生成型の段階 1）：1340 は段階 1 の 2,050/7,494 ステップ（1.72 秒/ステップ）、段階 1 は 19:55 ごろ、折 0 の評価は 20:10 ごろ、折 1〜4（1341）は 21:00 ごろ。
+
+## 2026-10-30 17:38 **提出用の 2 版がそろった（どちらもコミット実行が完走）。NTL の提出は P-022・P-023 の返事待ち**
+- natakumi/ntl-v31-nollama v1（S-068 用、V31 単体）：入力の探索 239 秒、comp stack 3,073 秒、infer.py 5,017 秒（ATLAS は見本 3 行を V31 の規則のまま完了）、合計 8,345 秒（2.3h）。出力 absorb/push_s068/out_v1/。
+- natakumi/ntl-v31-gen v2（S-071 用、変種 i）：合計 4,940 秒（前の記録）。
+- 提出の段取り（返事の後）：判定表③で S-068（V31-noLlama 単体、再現 ≥0.650 で土台に採用）と、判定表②で S-071（変種 i、代理 OOF +0.023、公開差 ≥0 で採用）を、同じ日に 1 本ずつ（NTL は 1 日 2 回まで、日中のみ）。提出コマンド：kaggle competitions submit name-that-llm -k natakumi/ntl-v31-nollama -f submission.parquet -v 1 ／ -k natakumi/ntl-v31-gen -f submission.parquet -v 2。
+- Kaggle の今週の GPU 枠：S-066 約 7.2h＋コミット 1.4h＋2.3h ≒ 10.9h を使用（残り 約 14.8h、10/31 09:00 に更新）。
