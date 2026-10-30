@@ -980,3 +980,8 @@
 - 公開ノート honghanhhh/gemma-4-baseline-lb-0-24（10/23、公開 0.24、元は flexonafft の v2＝0.22）：8 分・28 回・コマンド 240 秒・出力 8192・思考 4096・温度 0.2。解析サブエージェントなし、グラフ系 3 ツールは指示文で禁止。指示文に呼び出しの段取り（12 回目までに必ず編集、20 回目以降は確認と提出）。
 - v7_pub024（opus_gemma/v7_pub024/）：公開ノートのセルの FILES の文字列を ast.literal_eval で取り出し（コードは実行しない）、4 ファイルをそのまま写した。出典は opus_gemma/v7_pub024_SOURCE.txt。評価器の dry-run（形式・コンパイル）は通過。提出用カーネル natakumi/gemma4-v7-pub024-packaging（非公開）を 10:27 に push。完了したら提出する（M2-4：ハーネスの検証を通った提出物。今日の Gemma の提出は 1 回目）。
 - S-057 の時間短縮の候補（v6_think・v6_onecheck、Z890 で測定中）は、v7_pub024 の結果を見てから扱いを決める（v7 が時間内に収まれば不要になる可能性）。
+
+## 2026-10-30 10:31 **Gemma：v7_pub024 を提出（ID 57788451、PENDING）。結果は約 24 時間後（10/31 11:00 ごろ）**
+- 提出用カーネル natakumi/gemma4-v7-pub024-packaging v1（10:27〜10:30、COMPLETE）：validate_directory OK、宣言モデル gemma-4-31b-it-qat-w4a16-ct の 1 つ、zip 6 項目 7.3KiB。zip の中身は opus_gemma/v7_pub024 と完全一致（diff）。
+- 提出：kaggle competitions submit gemma-4-developer-agent -k natakumi/gemma4-v7-pub024-packaging -f submission.zip -v 1 → 受理（ID 57788451）。「0 submissions remaining today」＝Gemma は 1 日 1 回まで（今日は使い切り）。説明：v7_pub024: public LB0.24 config (honghanhhh; 8 min, 28 calls, 240 s, call-plan prompt)。
+- 判定（事前に決める）：0.18 以上＝銅相当に到達、公開の構成は私たちの環境でも再現。0.12〜0.17＝公開の 0.24 は運のぶれを含む（公開 60 件で SD 約 0.05）。時間超過＝本番は 8 分・28 回でも 12 時間を超える場合がある → S-057 の時間短縮を足す。
