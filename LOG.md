@@ -1176,3 +1176,5 @@
 ## 2026-11-01 04:03 **Gemma の調査（RESEARCH_GEMMA_20261101.md）：v7 の 0.17 は公開構成の平均どおり（同じ構成の 1 回ごとの標準偏差 1.56 タスク）、確実な銅は 0.20（12/58）。S-094：v9_samp6（sampling を推奨値、グラフ用 3 ツールを外す、max_turns 45、繰り返し止め）を作成、手元の安全確認 20 件をジョブ 1367a5 に**
 - opus_gemma/v9_samp6（v8_pub024_guard の複写＋4 点）：configs/sampling.yaml を temperature 1.0・top_p 0.95・top_k 64（GenerateContentConfig は top_k を持つ）、agent.yaml から get_code_neighbors・search_similar_code・get_code_subgraph を外し 6 ツール（vLLM の解析器の配列引数での無限ループ＝全損の回避、議論 753973）、eval_config の max_turns 80→45、指示文の末尾に「同じ誤りが 2 回なら同じ呼び出しを送らず run_command と Python で」「patch_size>0 なら終了」。eval_faithful.py の乾いた実行で compile ok。
 - ジョブ 1367a5（1367a の次、約 1.3h）：手元 41 件の先頭 20 件（results/valid_ids_local3_first20.txt）で、時間・呼び出しの繰り返し・形式崩れを見る（正解率は 20 件では比べない）。判定（事前）：平均時間が v7 の 212 秒の 1.3 倍以内、同じ呼び出しの 10 回以上の繰り返しが v7 以下、tool call の形式崩れでの全損なし → v8 の結果（15:30 ごろ）の後に提出。
+
+## 2026-11-01 05:04 S-093 の準備：08:00 以降に実行する手順 absorb/s093_daytime.sh（nollama v1 の提出、14B の LoRA の非公開データセット作成、v2u のコミット実行、提出の一覧。日中以外は即終了）を Z890 に作成（構文 OK、LF）。3 つの kernel の設定（非公開・GPU・インターネットなし・データ 15〜16 本・モデル 7 本）を確認。1367a は 1,600／12,407 歩（2.78 秒／歩）
