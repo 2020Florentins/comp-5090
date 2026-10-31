@@ -1172,3 +1172,7 @@
 - 並べ直し（03:48）：1367a〜c＝S-090（14B を open pool v10 で、12,407 歩×2.7 秒＝約 9.3h、3 部分）→ 1368a〜d＝S-088（32B を pool_v4 で、最初の部分で最大メモリを測って bs を決める、ckpt 250 歩ごと）。1364（pool_v5）は v10 が上位互換（掃除済み・198k）のため再実行しない。シャード 11 は取り直し済み（3.9GB）。
 - 小さな誤り：Windows で書いた部分ジョブが CRLF になり、Z890 の bash -n で NG（pending に入る前に止まった）→ sed で LF に直して投入。bash -n を通っても CRLF は実行時に「ファイル名」を作るため、今後は Z890 側で改行を確かめる。
 - Gemma の調査の担当（上限で中断）を再開させた。
+
+## 2026-11-01 04:03 **Gemma の調査（RESEARCH_GEMMA_20261101.md）：v7 の 0.17 は公開構成の平均どおり（同じ構成の 1 回ごとの標準偏差 1.56 タスク）、確実な銅は 0.20（12/58）。S-094：v9_samp6（sampling を推奨値、グラフ用 3 ツールを外す、max_turns 45、繰り返し止め）を作成、手元の安全確認 20 件をジョブ 1367a5 に**
+- opus_gemma/v9_samp6（v8_pub024_guard の複写＋4 点）：configs/sampling.yaml を temperature 1.0・top_p 0.95・top_k 64（GenerateContentConfig は top_k を持つ）、agent.yaml から get_code_neighbors・search_similar_code・get_code_subgraph を外し 6 ツール（vLLM の解析器の配列引数での無限ループ＝全損の回避、議論 753973）、eval_config の max_turns 80→45、指示文の末尾に「同じ誤りが 2 回なら同じ呼び出しを送らず run_command と Python で」「patch_size>0 なら終了」。eval_faithful.py の乾いた実行で compile ok。
+- ジョブ 1367a5（1367a の次、約 1.3h）：手元 41 件の先頭 20 件（results/valid_ids_local3_first20.txt）で、時間・呼び出しの繰り返し・形式崩れを見る（正解率は 20 件では比べない）。判定（事前）：平均時間が v7 の 212 秒の 1.3 倍以内、同じ呼び出しの 10 回以上の繰り返しが v7 以下、tool call の形式崩れでの全損なし → v8 の結果（15:30 ごろ）の後に提出。
