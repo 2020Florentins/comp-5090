@@ -1125,3 +1125,10 @@
   - V31 の尺度（重みの和 約 14）に直すと **λ'8≈0.07、λ'14≈0.14**（今の v2 は gen8 だけで λ'=0.25）。
   - 判定表②（代理 +0.008 以上かつ区間の下限 >0）を満たす。公開での確認は P-023 の後。
 - 次（11/1 日中、Kaggle の書き込みは 08:00 以降）：①生成用 LoRA（14B）を非公開データセットに（P-026 の運用）②v31_gen に gen14 の採点を足した v3 を作り、PSEUDO_TEST=1 で T4×2 の時間を測る（今週の GPU 枠 30h のうち 約 7.5h）。今夜は手元で v3 の組み立て（文字列の書き換えと構文確認だけ。V31 のコードは実行しない）。
+
+## 2026-10-31 22:45 **S-086：v31_gen14（V31-noLlama＋gen14＋gen8、ATLAS なし）を手元で組み立て（構文 OK、実行していない）。生成用 LoRA（14B）のデータセットの置き場を用意。夜間の GPU に S-087（14B の生成型を pool_v5 で、ジョブ 1364）**
+- absorb/v31_gen/mk_v31_gen14.py → absorb/v31_gen14/（ntl-v31-gen14.ipynb、kernel-metadata.json＝natakumi/ntl-v31-gen14・データセット 16 本、CHANGES_vs_gen.diff 190 行）と push_s086/（PSEUDO_TEST=1、時間の計測用）。変更：①GEN_KEEP_ATLAS=0 ②定数 GEN14_LAMBDA=0.14・GEN_LAMBDA_PAIR=0.07・GEN14_LAMBDA_SOLO=0.29 ③natakumi/ntl-genlm-q14b-full の探索 ④%%writefile ntl_genscore_q4.py のセル ⑤infer.py の生成型のブロックを、gen14 → gen8 の順に同じ候補（P の上位 5）で採点し、両方成功なら 0.07·gen8＋0.14·gen14、片方だけなら単独の重み、両方失敗なら P を変えない形に置き換え ⑥起動部の引数（14B の基盤は V31 と同じ B14＝Kaggle Model の qwen-3 14b-base）。全コードセルが compile を通過。
+- ntl_genscore_q4.py を修正：計算の型を「計算能力 8 以上なら bf16、それ以外（T4）は fp16」に（is_bf16_supported は模擬でも True を返す版があるため）。
+- kdata/ntl-genlm-q14b-full/（adapter/ に 1362 の LoRA 257MB を複写、元と同一を cmp で確認。dataset-metadata.json は非公開・CC-BY-SA-4.0、8B と同じ形）。作成は 11/1 08:00 以降。
+- 未確認の危険：本体の infer.py が GPU に残すメモリが多いと、14B（4bit で 9.3GiB＋計算分）が T4（15GB）に載らない→その場合は gen14 が飛ばされ、gen8 だけ（0.25）になる（予測は v2 と同じ）。擬似テストで確かめる。
+- S-087（新、L1・M1-1）ジョブ 1364（22:42 開始）：14B の生成型の段階 1 を nlm_pool_v5（119,899 件）で学び直し、折 0 まで。7,494 歩×2.76 秒で **04:50 ごろ完了**。採用の条件（事前、gen14 の置き換えとしてだけ）：折 0 で単独 0.6063 以上、かつ S＋gen8＋0.5·新 が 0.6809 以上。
