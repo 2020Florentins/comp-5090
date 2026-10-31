@@ -1183,3 +1183,8 @@
 - absorb/v5_oof/s095_topk.py・.log・.json：k=5 と片方だけ正解の割合は k=3 で 0.85%、k=4 で 0.22%。v2u（gen8 だけ）は k=5 のまま（時間に余裕があり、重みは k=5 で選んだため）。
 
 ## 2026-11-01 06:04 S-086 の準備：データセットの準備完了の後に実行する absorb/s086_push.sh（datasets status が ready のときだけ push_s086u を push、日中だけ）を作成。1367a は 2,925／12,407 歩（2.78 秒／歩）
+
+## 2026-11-01 08:04 **S-093：nollama v1 を提出（ID 57852598、PENDING。今日の 1 本目）。14B の生成用 LoRA の非公開データセット natakumi/ntl-genlm-q14b-full を作成（ready）。v2u（natakumi/ntl-v31-genu v1）と v3u の擬似テスト（natakumi/ntl-v31-gen14 v1、PSEUDO_TEST=1）を push、両方 RUNNING**
+- absorb/s093_daytime.sh（08:02:13〜08:02:44、ログ s093_daytime_*.log）：提出は受理（Kaggle の表示「残り 4 回」＝Kaggle の日付は UTC。私の運用上限は日本時間で 1 日 2 回、今日は 1 回目）。データセットは adapter.zip 227MB、08:02:56 に ready。
+- absorb/s086_push.sh（08:03）：push_s086u を push。T4×2 で 4,000 行（nlm_pool_v5 から固定の乱数）を全段通し、段ごとの時間・gen14 と gen8 の時間を測る。成功基準（S-086）：8.0h 以下、gen14 が全行で有限。
+- 判定（事前）：nollama v1 は判定表③（0.650 以上で土台に採用）。v2u（コミットの完了後、今日の 2 本目）は判定表②（nollama v1 との差 ≥0、代理 OOF +0.008 は満たす）。
