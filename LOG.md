@@ -1207,3 +1207,8 @@
 ## 2026-11-01 12:30 S-096（CPU）：Sinkhorn の強さは V31 の既定（α 0.45、目標の混ぜ 0.35）のままで良い（代理の流れ・上位 3 候補で 0.6846＝格子の最良、入れ子では 5 折中 4 折で選ばれる、入れ子 0.6812）。Sinkhorn なしは 0.6827（差 +0.002、訓練の折はクラスが均等なため小さい。テストでの効果は S-074 の公開で）。absorb/v5_oof/s096_sinkhorn.py・.log・.json。採点はまだ（2 本とも PENDING、v3u の擬似テストは RUNNING、1367b は 9,200 歩）
 
 ## 2026-11-01 13:30 状態：2 本は PENDING、v3u の擬似テストは RUNNING、1367b は 10,500／12,407 歩。擬似テストの合格後に使う absorb/s097_push_v3u.sh（v31_gen14u＝PSEUDO_TEST=0 を同じ kernel の新しい版として push、日中だけ）を用意
+
+## 2026-11-01 14:14 **本人の返事「全て OK」：確認待ちの項目を推奨どおりに反映**
+- P-024（Llama の Meta の規約への同意、本人の操作）：推奨どおり後回し。P-025（Kaggle の GPU 枠を擬似テストに使う）・P-026（生成用 LoRA や TF-IDF の非公開データセット）：続ける。P-027（最終 2 本の選択は 1/10〜1/12 に本人）：予定どおり。
+- 削除の確認待ちだった試験の出力など 19 件（726MB：opus_ntl の genlm_disc_tiny・tiny2・toklp_tiny・lora24_dry・genlm_q14b_smoke・genlm_q14b_dry・genlm_q4r_tinytest・tinytest2・genlm_dry×3・tok_tiny、absorb/v5_ds/test1、absorb/v5_oof/s065_v5_train_logits.py、_tmp_parse_variations_20261101.py、__pycache__×3、gemma4/_ktest）は、消さずに /data/nakamura/comp/_trash_20261101/ へ元の構造のまま移した（戻せる）。docker の残りのコンテナ nostalgic_shannon（swegemma-public、10 日間 Up）は停止のみ（削除はしていない）。
+- 10/21 に私が置いた待機のループ 2 つ（PID 238135・238705：kernel ntl-ens4-base-olmo2-mistral の完了を待つが、最終行の版の警告を見て完了を検知できず、10 日間 45〜60 秒ごとに Kaggle の API を呼び続けている）を止めようとしたが、自動判定（他の処理への干渉）で拒否された。回避はしない。本人が止める場合は Z890 で kill 238135 238705。
