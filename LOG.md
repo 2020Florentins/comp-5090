@@ -1212,3 +1212,9 @@
 - P-024（Llama の Meta の規約への同意、本人の操作）：推奨どおり後回し。P-025（Kaggle の GPU 枠を擬似テストに使う）・P-026（生成用 LoRA や TF-IDF の非公開データセット）：続ける。P-027（最終 2 本の選択は 1/10〜1/12 に本人）：予定どおり。
 - 削除の確認待ちだった試験の出力など 19 件（726MB：opus_ntl の genlm_disc_tiny・tiny2・toklp_tiny・lora24_dry・genlm_q14b_smoke・genlm_q14b_dry・genlm_q4r_tinytest・tinytest2・genlm_dry×3・tok_tiny、absorb/v5_ds/test1、absorb/v5_oof/s065_v5_train_logits.py、_tmp_parse_variations_20261101.py、__pycache__×3、gemma4/_ktest）は、消さずに /data/nakamura/comp/_trash_20261101/ へ元の構造のまま移した（戻せる）。docker の残りのコンテナ nostalgic_shannon（swegemma-public、10 日間 Up）は停止のみ（削除はしていない）。
 - 10/21 に私が置いた待機のループ 2 つ（PID 238135・238705：kernel ntl-ens4-base-olmo2-mistral の完了を待つが、最終行の版の警告を見て完了を検知できず、10 日間 45〜60 秒ごとに Kaggle の API を呼び続けている）を止めようとしたが、自動判定（他の処理への干渉）で拒否された。回避はしない。本人が止める場合は Z890 で kill 238135 238705。
+
+## 2026-11-01 14:45 **NTL：nollama v1（V31 から Llama を抜いた再現、57852598）が公開 0.659＝最良を更新（0.624 から +0.035、銅 0.661 まで −0.002）。判定表③で土台に採用。v3u の擬似テストは 4,000 行を 6.04h で完走（gen14 37 分・gen8 34 分、全行で値あり）＝S-086 合格、本番版を push（ntl-v31-gen14 v2）**
+- 判定表③（事前：0.650 以上で土台）→ 採用。v2u（57856603、gen8＋均等）は採点中で、判定表②（nollama v1 の 0.659 以上で生成型を採用）で判定する。
+- v3u の擬似テスト（natakumi/ntl-v31-gen14 v1、PSEUDO_TEST=1、出力 absorb/push_s086u/out_v1/）：全体 21,750 秒（6.04h、9h の上限まで約 3h の余裕）、gen14 の採点 2,226 秒（4,000 行×3 候補、全 4,000 行で値あり）、gen8 2,020 秒、生成型の加算で argmax が 13.9% の行で変化、均等分布は 951／4,000 行。成功基準（8.0h 以下、gen14 が全行で有限）を満たす。
+- s097_push_v3u.sh（14:45）：本番版（absorb/v31_gen14u、PSEUDO_TEST=0）を natakumi/ntl-v31-gen14 の版 2 として push。コミット実行の後、11/2 08:00 以降に提出（今日の 2 枠は使用済み）。
+- GPU：1367b（14B×v10）が 12,075／12,407 歩で稼働中（使用率 99%）。
