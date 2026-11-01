@@ -1244,3 +1244,5 @@
 - 判定（事前）：v9 が点数付きで完走すれば、7 タスク差の雑音（1 回の標準偏差 1.56 タスク）を踏まえ、0.20 以上なら本命、0.15〜0.19 なら v7 と同等。点数が空なら、次は v7 そのもの（完走実績あり）の再提出か、v10（呼び出しの上限 34）を時間に余裕を持たせて検討。
 
 ## 2026-11-01 18:35 S-097 の準備：v3u の本番版（ntl-v31-gen14 v2）の出力を absorb/v31_gen14u/out_v2/ に取得して確認（gen14・gen8 ともテストの 3 行で採点、gen added: g8 0.1＋g14 0.4、k 3、均等 3/3 行、submission.parquet は 3 行・列 id, model）。Sinkhorn なしの版（ntl-v31-genu-nosk v1）は RUNNING。32B（1368b）は 950／4,496 歩（6.0 秒／歩、最大 26.6GB、全体 約 7.5h で 1368c に続く）
+
+## 2026-11-01 19:46 S-097 の準備：Sinkhorn なしの版（ntl-v31-genu-nosk v1）のコミットが完了、出力を absorb/push_sub15u_nosk/out_v1/ で確認（gen added: lambda 0.3、均等 3/3 行、診断の sinkhorn 0.0、submission.parquet 3 行）。11/2 の 08:00 以降に実行する absorb/s097_submit.sh（v3u＝ntl-v31-gen14 v2 と nosk＝ntl-v31-genu-nosk v1 の 2 本を提出、日中以外は即終了、LF・構文 OK）を用意
