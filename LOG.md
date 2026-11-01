@@ -1196,3 +1196,8 @@
 - 判定の書き方の誤り：最初の比較スクリプトは「件ごとの誤りが 0」を条件にしており、事前の条件（全損なし＝全件が走り切る）と違っていた→事前の条件に直して判定。軌跡の読み方（tool_calls の function_name・arguments）も最初は誤っていた（0 件）→直して 20 件とも読めた。
 - 次：v8 の結果（15:30 ごろ）の後に v9 を提出。空パッチ対策として、道具の呼び出しの上限 28→34（調査の 4 位、8 分は維持）の v10 を候補に。
 - 1367b（14B×v10）は 10:00 に 6,000 歩から再開。v2u のコミット実行は 130 分経過で RUNNING（nollama v1 のコミットは 2.3h だった）。
+
+## 2026-11-01 10:30 **S-093：v2u を提出（ID 57856603、PENDING。今日の 2 本目＝今日の NTL の提出は終了）。Gemma の次の候補 v10_cap34（v9＋呼び出しの上限 28→34）を作成**
+- v2u（natakumi/ntl-v31-genu v1）：コミット実行 08:02〜10:28 ごろ COMPLETE。出力を absorb/push_sub15u/out_v1/ に取得し確認：ログに「gen added: lambda 0.3 k 5 rows 3」「atlas uniform 0.1 on 3/3 rows」、submission.parquet は 3 行・列 id, model。提出：kaggle competitions submit name-that-llm -k natakumi/ntl-v31-genu -f submission.parquet -v 1（説明 S-071u …）→ 受理。
+- 判定（事前）：nollama v1（57852598）は判定表③（0.650 以上で土台）、v2u（57856603）は判定表②（nollama v1 との差 ≥0）。提出間の雑音は σ 約 0.006〜0.009（議論 752766）。
+- Gemma：opus_gemma/v10_cap34（v9_samp6 の eval_config の max_tool_calls だけ 34）。乾いた実行で compile ok。v9 の空パッチ 6 件がすべて 28 回の上限に達していたため。8 分の上限は維持。
