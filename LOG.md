@@ -1345,3 +1345,4 @@
 
 ## 2026-11-03 11:35 S-113：v4u（absorb/v31_gen14v10u、natakumi/ntl-v31-gen14v10 版 1）を push、RUNNING。v3u の本番版を写し、14B の生成型の LoRA の参照（グロブ 1 行と説明 1 行）と dataset_sources だけを ntl-genlm-q14b-v10-full に替えた（差分 4 行、重み・候補数は v3u と同じ）。コミット実行の完了後、11/4 08:00 以降の枠で提出（S-114）。
 - 11/03 12:06 S-113：v4u（natakumi/ntl-v31-gen14v10）はまだ RUNNING。次の起床で再確認。
+- 11/03 12:47 S-113：v4u はまだ RUNNING（push から約 70 分）。
