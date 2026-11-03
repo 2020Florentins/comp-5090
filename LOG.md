@@ -1347,3 +1347,4 @@
 - 11/03 12:06 S-113：v4u（natakumi/ntl-v31-gen14v10）はまだ RUNNING。次の起床で再確認。
 - 11/03 12:47 S-113：v4u はまだ RUNNING（push から約 70 分）。
 - 11/03 13:48 **S-113 完了**：v4u（natakumi/ntl-v31-gen14v10 版 1）COMPLETE。出力 absorb/v31_gen14v10u/out_v1/submission.parquet は 3 行・欠損なし、ログに ntl-genlm-q14b-v10-full の読み込み、traceback 0。kaggle は arc-agi-3/.venv/bin/kaggle。次は S-114（11/4 08:00 以降に提出）。
+- 11/03 13:49 **S-114 前倒しで実行**：今日の NTL は 08:03 の保険 B の 1 本だけで上限 2 本に 1 枠あり、時間帯も可のため、v4u（natakumi/ntl-v31-gen14v10 版 1、-f submission.parquet）を提出 → 受理 **57933240**（PENDING）。今日の NTL はこれで 2 本＝上限。判定（事前、S-115）：0.666 以上なら最終の 2 本目の候補を v2u 0.664 から入れ替え、未満なら v2u のまま。
