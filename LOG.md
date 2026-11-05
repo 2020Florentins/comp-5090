@@ -1399,3 +1399,4 @@
 
 ## 2026-11-06 01:20 **S-127 完了：NTL v6u（58019437、gen8 0.30・gen14 0.8）は公開 0.671**（v4u 0.672 に −0.001、v3u と同じ）。事前の規則（0.665〜0.672 の間）→ 雑音として保留。最終の候補は v3u と v4u のまま。代理の +0.004 は公開に出ず（代理と公開の対応の弱さを再確認）。NTL の新しい実験は止めたまま。
 - **Gemma v13 の準備（夜間のため Z890 のファイル作成だけ、Kaggle には書かない）**：opus_gemma/v13_cap6min/（v7 の写し、max_time_minutes 8→6 の 1 行だけ、diff で確認）と sub_kernel_v13_cap6min/（v12 と同じ作り方、id natakumi/gemma4-v13-cap6min-packaging）。push と提出は 08:00 以降。
+- 11/06 08:02 S-128：Gemma v13 の提出用カーネル natakumi/gemma4-v13-cap6min-packaging 版 1 を push（RUNNING）。
