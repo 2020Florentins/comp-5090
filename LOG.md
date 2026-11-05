@@ -1370,3 +1370,5 @@
 - 案（v12）：v7 の eval_config の max_time_minutes を 8→5 にするだけ。失う解決は手元で約 1／17 件、最悪の合計は 120×5 分＝10 時間（準備・検証を除く）。
 
 ## 2026-11-05 09:20 **S-119：Gemma v12 を作成し提出用カーネルを push**。opus_gemma/v12_cap5min/（v7_pub024 の写し、eval_config.yaml の max_time_minutes 8→5 の 1 行だけ、diff -r で確認）。提出用 opus_gemma/sub_kernel_v12_cap5min/（v7 のノートのうち上限の 1 行と見出しだけ置換、出力は空に、kernel-metadata は id・title・code_file だけ変更）を natakumi/gemma4-v12-cap5min-packaging 版 1 として push（RUNNING）。次は COMPLETE と zip の中身の確認のあと、今日の Gemma の枠で提出。
+
+## 2026-11-05 09:37 **S-120 完了：Gemma v12 を提出 → 受理 58003866（PENDING）**。natakumi/gemma4-v12-cap5min-packaging 版 1 は COMPLETE、出力 sub_kernel_v12_cap5min/out_k1/、zip を zipcheck/ に展開して opus_gemma/v12_cap5min と diff -r で完全一致、ログに validate_directory: OK。今日の Gemma の枠は使い切り。判定（事前、S-121）：点数付きで完走すれば、空の原因は時間超過だったとみなし上限 5 分を以後の標準にする。0.20 以上なら本命。空なら時間以外の原因を疑い、v9 系の再提出か上限 4 分を検討。
