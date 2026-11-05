@@ -1372,3 +1372,8 @@
 ## 2026-11-05 09:20 **S-119：Gemma v12 を作成し提出用カーネルを push**。opus_gemma/v12_cap5min/（v7_pub024 の写し、eval_config.yaml の max_time_minutes 8→5 の 1 行だけ、diff -r で確認）。提出用 opus_gemma/sub_kernel_v12_cap5min/（v7 のノートのうち上限の 1 行と見出しだけ置換、出力は空に、kernel-metadata は id・title・code_file だけ変更）を natakumi/gemma4-v12-cap5min-packaging 版 1 として push（RUNNING）。次は COMPLETE と zip の中身の確認のあと、今日の Gemma の枠で提出。
 
 ## 2026-11-05 09:37 **S-120 完了：Gemma v12 を提出 → 受理 58003866（PENDING）**。natakumi/gemma4-v12-cap5min-packaging 版 1 は COMPLETE、出力 sub_kernel_v12_cap5min/out_k1/、zip を zipcheck/ に展開して opus_gemma/v12_cap5min と diff -r で完全一致、ログに validate_directory: OK。今日の Gemma の枠は使い切り。判定（事前、S-121）：点数付きで完走すれば、空の原因は時間超過だったとみなし上限 5 分を以後の標準にする。0.20 以上なら本命。空なら時間以外の原因を疑い、v9 系の再提出か上限 4 分を検討。
+
+## 2026-11-05 10:19 **S-122 完了：NTL の金の境界（0.697、差 0.025）を埋める未試験の案で、+0.005 以上を根拠をもって見込めるものは無い**。
+- 確認した範囲：RESEARCH_NTL_METHODS_20261102.md の候補 1〜5 は、すべて試験済みで不採用（S-108 ATLAS の有界スコア、S-111 位置固定・Markdown と EM の事前確率、S-112 ラベル伝播、ジョブ 1405 出どころタグ）。ほかに S-105 スタッキング（最良 +0.0049、不採用）、S-102 S の V31 への追加（−0.006）、S-100 新しい公開データ（価値なし）、32B（門で不通過）。
+- 残る未試験で安いもの（期待は +0.005 未満）：(A) V31 の代理の流れで、gen14 の v4 版と v10 版の LoRA の対数尤度を平均する（OOF は opus_ntl/genlm_q14b_h* と genlm_q14b_v10_h*、CPU で数分。事前の期待 0〜+0.002、成功基準は入れ子 +0.003 以上）。
+- 判断：金は現実的でないと記録し、NTL は銀の圏内を最終提出で守ること（v3u と v4u、1/10〜1/12 に本人と決定）を主にする。上積みは (A) の 1 件だけ CPU で確かめ、通らなければ NTL の新しい実験は止める。Gemma（実質の銅 0.20 まで +2 件）に時間を回す。
